@@ -23,8 +23,9 @@ namespace charactertest
 		string strength = "";
 		string agility = "";
 		string intelligence = "";
+		int pcClass;
+		int enClass;
 		int pcOrEn = 0;
-		int maxHealth;
 		
 		private MainForm _callingForm;
 		
@@ -49,6 +50,7 @@ namespace charactertest
 		strength = "16";
 		agility = "12";
 		intelligence = "6";
+		pcClass = 1;
 		}
 		
 		void Ranger()
@@ -59,6 +61,7 @@ namespace charactertest
 		strength = "10";
 		agility = "18";
 		intelligence = "10";
+		pcClass = 2;
 		}
 		
 		void Mage()
@@ -69,6 +72,7 @@ namespace charactertest
 		strength = "5";
 		agility = "8";
 		intelligence = "18";
+		pcClass = 3;
 		}
 		
 		void Troll()
@@ -79,6 +83,7 @@ namespace charactertest
 		strength = "20";
 		agility = "10";
 		intelligence = "4";
+		enClass = 1;
 		}
 		
 		void BanditFighter()
@@ -89,6 +94,7 @@ namespace charactertest
 		strength = "16";
 		agility = "12";
 		intelligence = "6";
+		enClass = 2;
 		}
 		
 		void BanditRanger()
@@ -99,6 +105,7 @@ namespace charactertest
 		strength = "10";
 		agility = "18";
 		intelligence = "10";
+		enClass = 3;
 		}
 		
 		void BanditMage()
@@ -109,18 +116,19 @@ namespace charactertest
 		strength = "4";
 		agility = "6";
 		intelligence = "20";
+		enClass = 4;
 		}
 		
 		void StatTransfer()
 		{
 			if(pcOrEn == 0)
 			{
-				_callingForm.SetPcInfo(name, health, mana, strength, agility, intelligence, maxHealth);
+				_callingForm.SetPcInfo(name, health, mana, strength, agility, intelligence, pcClass);
 			}
 				
 			else if(pcOrEn == 1)
 			{
-				_callingForm.SetEnInfo(name, health, mana, strength, agility, intelligence, maxHealth);
+				_callingForm.SetEnInfo(name, health, mana, strength, agility, intelligence, enClass);
 			}
 		}
 		

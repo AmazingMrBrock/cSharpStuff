@@ -29,8 +29,14 @@ namespace charactertest
 		int turnCount = 0;
 		int diceType;
 		int diceResult;
-		int maxHealth;
-		int curHealth;
+		int maxPcHealth;
+		int maxEnHealth;
+		int maxPcMana;
+		int maxEnMana;
+		int manaHolder;
+		int manaHolder2;
+		int pcClass; //1-fighter 2-ranger 3-mage
+		int enClass; //1-troll 2-fighter 3-ranger 4-mage 
 	
 		
 		Random _r = new Random();
@@ -44,8 +50,8 @@ namespace charactertest
 			InitializeComponent();			
 								
 			//
-			// TODO: setup attack so it doen't give health with negative st modifier
-			//	make maxHealth for pc and en 
+			// TODO:
+			//	
 			//	figure out why I was thinking about curhealth
 			//	setup ai
 			//	
@@ -67,16 +73,7 @@ namespace charactertest
 			}
 			MeleeModifier();
 			diceOut = diceResult + statAdjuster;
-			
-			if(pcOrEn == 0)
-			{
-				
-			}
-			else if(pcOrEn == 1)
-			{
-				
-			}
-			
+			if(diceOut <= 0) diceOut = 1;
 		}
 		
 		public void MeleeModifier()
@@ -106,19 +103,39 @@ namespace charactertest
 			string x = "0";
 			x = healthHolder;
 			int healthChange = Convert.ToInt32(x);
-			if (healingOnOff == 0)
+			if(pcOrEn == 0)
 			{
-				finalHealth = healthChange - diceOut;
-				if (finalHealth < 0) 
+				if (pcClass < 3)
 				{
-					finalHealth = 0;
+					finalHealth = healthChange - diceOut;
+					if (finalHealth < 0)
+					{
+						finalHealth = 0;
+					}
+				}
+				else if (pcClass == 3)
+				{
+					finalHealth = healthChange + diceOut;
+					if (finalHealth > maxEnHealth) finalHealth = maxEnHealth;
 				}
 			}
-			else if (healingOnOff == 1)
+			else if(pcOrEn == 1)
 			{
-				finalHealth = healthChange + diceOut;
-				if (finalHealth > maxHealth) finalHealth = maxHealth;
+				if (enClass < 4)
+				{
+					finalHealth = healthChange - diceOut;
+					if (finalHealth < 0)
+					{
+						finalHealth = 0;
+					}
+				}
+				else if (enClass == 4)
+				{
+					finalHealth = healthChange + diceOut;
+					if (finalHealth > maxPcHealth) finalHealth = maxEnHealth;
+				}
 			}
+			
 			healthHolder = Convert.ToString(finalHealth);	
 		}
 		
@@ -128,39 +145,72 @@ namespace charactertest
 			{
 				if (pcOrEn == 0) MessageBox.Show("Enemy has died. You win");
 				else if (pcOrEn == 1) MessageBox.Show("You have died. Fail");
-				enHealthLabel.Text = "200";
-				pcHealthLabel.Text = "100";
+				enHealthLabel.Text = Convert.ToString(maxEnHealth);
+				pcHealthLabel.Text = Convert.ToString(maxPcHealth);
 			}
 		}
 		
-		void TurnSetAi()
+		void TurnSetAi(int aiHealthHolder, int aiManaHolder)
 		{
+			// AI todo
+			// Enemies can use magic and healing
+			// 
+			aiHealthHolder = Convert.ToInt32(enHealthLabel.Text);
+			aiManaHolder = Convert.ToInt32(enManaLabel.Text);
+			
 			if (turnCount == 1)
 			{
-				EnMeleeAttack();
+				if(enClass == 4)
+				{
+					if(aiManaHolder >= 50)
+					{
+						if(aiHealthHolder <= 50)
+						{
+							EnHealing();
+						}
+						else if(aiHealthHolder >= 50)
+						{
+							EnFireball();
+						}
+					}
+					
+					else if(aiManaHolder <= 50)
+					{
+						EnMeleeAttack();
+					}
+				}
+				else if(enClass < 4)
+				{
+					EnMeleeAttack();
+				}
 			}
+			
 		}
 		
-		public void SetEnInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setMax)
+		public void SetEnInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setClass)
 		{
 			this.enNameLabel.Text = setName;
-			this.enHealthLabel.Text = setHealth;
-			this.enManaLabel.Text = setMana;
+			maxEnHealth = Convert.ToInt32(setHealth);
+			this.enHealthLabel.Text = Convert.ToString(maxEnHealth);
+			maxEnMana = Convert.ToInt32(setMana);
+			this.enManaLabel.Text = Convert.ToString(maxEnMana);
 			this.enStLabel.Text = setSt;
 			this.enAgLabel.Text = setAg;
 			this.enIntLabel.Text = setInt;
-			this.maxHealth = setMax;
+			enClass = setClass;
 		}
 		
-		public void SetPcInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setMax)
+		public void SetPcInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setClass)
 		{
 			this.pcNameLabel.Text = setName;
-			this.pcHealthLabel.Text = setHealth;
-			this.pcManaLabel.Text = setMana;
+			maxPcHealth = Convert.ToInt32(setHealth);
+			this.pcHealthLabel.Text = Convert.ToString(maxPcHealth);
+			maxPcMana = Convert.ToInt32(setMana);
+			this.pcManaLabel.Text = Convert.ToString(maxPcMana);
 			this.pcStLabel.Text = setSt;
 			this.pcAgLabel.Text = setAg;
 			this.pcIntLabel.Text = setInt;
-			this.maxHealth = setMax;
+			pcClass = setClass;
 		}
 		
 		void PcMeleeButtClick(object sender, EventArgs e)
@@ -170,7 +220,6 @@ namespace charactertest
 			healthHolder = enHealthLabel.Text;
 			maxDice = 1;
 			diceType = 6;
-			healingOnOff = 0;
 			pcOrEn = 0;
 			DiceLoop();
 			StatChanger();
@@ -185,7 +234,6 @@ namespace charactertest
 			healthHolder = enHealthLabel.Text;
 			maxDice = 1;
 			diceType = 6;
-			healingOnOff = 0;
 			pcOrEn = 0;
 			DiceLoop();
 			StatChanger();
@@ -200,7 +248,6 @@ namespace charactertest
 			healthHolder = enHealthLabel.Text;
 			maxDice = 1;
 			diceType = 6;
-			healingOnOff = 0;
 			pcOrEn = 0;
 			DiceLoop();
 			StatChanger();
@@ -215,7 +262,6 @@ namespace charactertest
 			healthHolder = pcHealthLabel.Text;
 			maxDice = 2;
 			diceType = 6;
-			healingOnOff = 1;
 			DiceLoop();
 			StatChanger();
 			pcHealthLabel.Text = healthHolder;
@@ -228,12 +274,58 @@ namespace charactertest
 			healthHolder = pcHealthLabel.Text;
 			maxDice = 1;
 			diceType = 6;
-			healingOnOff = 0;
 			pcOrEn = 1;
 			DiceLoop();
 			StatChanger();
 			pcHealthLabel.Text = healthHolder;
 			WinLoseCondition();
+			turnCount = 0;
+		}
+		
+		void EnRangedAttack()
+		{
+			statHolder = Convert.ToInt32(enStLabel.Text);
+			healthHolder = pcHealthLabel.Text;
+			maxDice = 1;
+			diceType = 6;
+			pcOrEn = 1;
+			DiceLoop();
+			StatChanger();
+			pcHealthLabel.Text = healthHolder;
+			WinLoseCondition();
+			turnCount = 0;
+		}
+				
+		void EnFireball()
+		{
+			pcOrEn = 1;
+			statHolder = Convert.ToInt32(enStLabel.Text);
+			healthHolder = pcHealthLabel.Text;
+			manaHolder = Convert.ToInt32(enManaLabel.Text);
+			manaHolder2 = manaHolder - 10;
+			enManaLabel.Text =  Convert.ToString(manaHolder2);
+			maxDice = 4;
+			diceType = 6;
+			DiceLoop();
+			StatChanger();
+			pcHealthLabel.Text = healthHolder;
+			WinLoseCondition();
+			turnCount = 0;
+		}
+						
+		void EnHealing()
+		{
+			pcOrEn = 1;
+			statHolder = Convert.ToInt32(enIntLabel.Text);
+			healthHolder = enHealthLabel.Text;
+			manaHolder = Convert.ToInt32(enManaLabel.Text);
+			manaHolder2 = manaHolder - 15;
+			enManaLabel.Text =  Convert.ToString(manaHolder2);
+			maxDice = 5;
+			diceType = 10;
+			DiceLoop();
+			StatChanger();
+			pcHealthLabel.Text = healthHolder;
 			turnCount = 0;
 		}
 		
