@@ -47,20 +47,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs" />
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Ai.cs" />
+    <Compile Include="Actions.cs" />
+    <Compile Include="ActionMods.cs" />
+    <Compile Include="ActionVariables.cs" />
+    <Compile Include="Dice.cs" />
+    <Compile Include="CharStats.cs" />
+    <Compile Include="CharStats.Designer.cs">
+      <DependentUpon>CharStats.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalVariables.cs" />
+    <Compile Include="Items.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stats.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="CharStats.resx">
+      <DependentUpon>CharStats.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

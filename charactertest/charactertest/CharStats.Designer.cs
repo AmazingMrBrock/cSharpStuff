@@ -148,6 +148,7 @@ namespace charactertest
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Name = "CharStats";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Form1";
 			this.ResumeLayout(false);
 		}

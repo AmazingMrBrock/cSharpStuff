@@ -58,7 +58,8 @@ namespace charactertest
 			this.pcRangedButt = new System.Windows.Forms.Button();
 			this.pcFireballButt = new System.Windows.Forms.Button();
 			this.pcHealingButt = new System.Windows.Forms.Button();
-			this.chClassButt = new System.Windows.Forms.Button();
+			this.HealthPotionButton = new System.Windows.Forms.Button();
+			this.ManaPotionButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// nameLabel
@@ -195,7 +196,7 @@ namespace charactertest
 			// 
 			// pcMeleeButt
 			// 
-			this.pcMeleeButt.Location = new System.Drawing.Point(140, 204);
+			this.pcMeleeButt.Location = new System.Drawing.Point(45, 210);
 			this.pcMeleeButt.Name = "pcMeleeButt";
 			this.pcMeleeButt.Size = new System.Drawing.Size(75, 23);
 			this.pcMeleeButt.TabIndex = 1;
@@ -205,7 +206,7 @@ namespace charactertest
 			// 
 			// pcRangedButt
 			// 
-			this.pcRangedButt.Location = new System.Drawing.Point(140, 233);
+			this.pcRangedButt.Location = new System.Drawing.Point(45, 239);
 			this.pcRangedButt.Name = "pcRangedButt";
 			this.pcRangedButt.Size = new System.Drawing.Size(75, 23);
 			this.pcRangedButt.TabIndex = 1;
@@ -215,7 +216,7 @@ namespace charactertest
 			// 
 			// pcFireballButt
 			// 
-			this.pcFireballButt.Location = new System.Drawing.Point(221, 204);
+			this.pcFireballButt.Location = new System.Drawing.Point(126, 210);
 			this.pcFireballButt.Name = "pcFireballButt";
 			this.pcFireballButt.Size = new System.Drawing.Size(75, 23);
 			this.pcFireballButt.TabIndex = 1;
@@ -225,7 +226,7 @@ namespace charactertest
 			// 
 			// pcHealingButt
 			// 
-			this.pcHealingButt.Location = new System.Drawing.Point(221, 233);
+			this.pcHealingButt.Location = new System.Drawing.Point(126, 239);
 			this.pcHealingButt.Name = "pcHealingButt";
 			this.pcHealingButt.Size = new System.Drawing.Size(75, 23);
 			this.pcHealingButt.TabIndex = 1;
@@ -233,22 +234,33 @@ namespace charactertest
 			this.pcHealingButt.UseVisualStyleBackColor = true;
 			this.pcHealingButt.Click += new System.EventHandler(this.PcHealingButtClick);
 			// 
-			// chClassButt
+			// HealthPotionButton
 			// 
-			this.chClassButt.Location = new System.Drawing.Point(15, 204);
-			this.chClassButt.Name = "chClassButt";
-			this.chClassButt.Size = new System.Drawing.Size(75, 23);
-			this.chClassButt.TabIndex = 2;
-			this.chClassButt.Text = "Change Class\'";
-			this.chClassButt.UseVisualStyleBackColor = true;
-			this.chClassButt.Click += new System.EventHandler(this.ChClassButtClick);
+			this.HealthPotionButton.Location = new System.Drawing.Point(208, 209);
+			this.HealthPotionButton.Name = "HealthPotionButton";
+			this.HealthPotionButton.Size = new System.Drawing.Size(97, 23);
+			this.HealthPotionButton.TabIndex = 2;
+			this.HealthPotionButton.Text = "Health Potion";
+			this.HealthPotionButton.UseVisualStyleBackColor = true;
+			this.HealthPotionButton.Click += new System.EventHandler(this.HealthPotionButtonClick);
+			// 
+			// ManaPotionButton
+			// 
+			this.ManaPotionButton.Location = new System.Drawing.Point(208, 238);
+			this.ManaPotionButton.Name = "ManaPotionButton";
+			this.ManaPotionButton.Size = new System.Drawing.Size(97, 23);
+			this.ManaPotionButton.TabIndex = 3;
+			this.ManaPotionButton.Text = "Mana Potion";
+			this.ManaPotionButton.UseVisualStyleBackColor = true;
+			this.ManaPotionButton.Click += new System.EventHandler(this.ManaPotionButtonClick);
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(490, 292);
-			this.Controls.Add(this.chClassButt);
+			this.ClientSize = new System.Drawing.Size(455, 292);
+			this.Controls.Add(this.ManaPotionButton);
+			this.Controls.Add(this.HealthPotionButton);
 			this.Controls.Add(this.pcHealingButt);
 			this.Controls.Add(this.pcFireballButt);
 			this.Controls.Add(this.pcRangedButt);
@@ -271,11 +283,14 @@ namespace charactertest
 			this.Controls.Add(this.enNameLabel);
 			this.Controls.Add(this.pcNameLabel);
 			this.Controls.Add(this.nameLabel);
+			this.MaximizeBox = false;
 			this.Name = "MainForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "charactertest";
 			this.ResumeLayout(false);
 		}
-		private System.Windows.Forms.Button chClassButt;
+		private System.Windows.Forms.Button ManaPotionButton;
+		private System.Windows.Forms.Button HealthPotionButton;
 		private System.Windows.Forms.Button pcHealingButt;
 		private System.Windows.Forms.Button pcFireballButt;
 		private System.Windows.Forms.Button pcRangedButt;

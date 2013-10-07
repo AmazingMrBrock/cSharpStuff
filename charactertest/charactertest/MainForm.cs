@@ -11,328 +11,139 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+
 namespace charactertest
 {
-	/// <summary>
-	/// Description of MainForm.
-	/// </summary>
 	public partial class MainForm : Form
 	{
-		int statHolder;
-		int statAdjuster;
-		string healthHolder;
-		int finalHealth;
-		int diceOut;
-		int maxDice;
-		int healingOnOff = 0;
-		int pcOrEn = 0;
-		int turnCount = 0;
-		int diceType;
-		int diceResult;
-		int maxPcHealth;
-		int maxEnHealth;
-		int maxPcMana;
-		int maxEnMana;
-		int manaHolder;
-		int manaHolder2;
-		int pcClass; //1-fighter 2-ranger 3-mage
-		int enClass; //1-troll 2-fighter 3-ranger 4-mage 
-	
+		public static GlobalCharStats _pcStats = new GlobalCharStats();
+		public static GlobalCharStats _npcStats = new GlobalCharStats();
 		
-		Random _r = new Random();
-		
-	
 		public MainForm()
 		{
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
-			InitializeComponent();			
-								
-			//
-			// TODO:
-			//	
-			//	figure out why I was thinking about curhealth
-			//	setup ai
-			//	
-			//
-		}
+			InitializeComponent();
+			CharStats form = new CharStats(this);
+			form.Show();
 			
-		public int RandomDice()
-		{
-			int n = _r.Next (1, diceType +1);
-			return n;
-		}
-
-		public void DiceLoop()
-		{
-			diceResult = 0;
-			for(int i = 0; i < maxDice; i++)
-			{
-				diceResult += RandomDice();
-			}
-			MeleeModifier();
-			diceOut = diceResult + statAdjuster;
-			if(diceOut <= 0) diceOut = 1;
-		}
-		
-		public void MeleeModifier()
-		{
-			if (statHolder > 10)
-			{
-				int n = statHolder - 10;
-				statAdjuster = n / 2;				
-			}
-			else if (statHolder < 10)
-			{
-				int n = statHolder;
-				if (n == 9) {statAdjuster = -1;}
-				else if (n == 8) {statAdjuster = -2;}
-				else if (n == 7) {statAdjuster = 3;}
-				else if (n == 6) {statAdjuster = -4;}
-				else if (n == 5) {statAdjuster = -4;}
-				else if (n == 4) {statAdjuster = -5;}
-				else if (n == 3) {statAdjuster = -5;}
-				else if (n == 2) {statAdjuster = -6;}
-				else if(n == 1) {statAdjuster = -6;}
-			}
-		}
-		
-		public void StatChanger()
-		{
-			string x = "0";
-			x = healthHolder;
-			int healthChange = Convert.ToInt32(x);
-			if(pcOrEn == 0)
-			{
-				if (pcClass < 3)
-				{
-					finalHealth = healthChange - diceOut;
-					if (finalHealth < 0)
-					{
-						finalHealth = 0;
-					}
-				}
-				else if (pcClass == 3)
-				{
-					finalHealth = healthChange + diceOut;
-					if (finalHealth > maxEnHealth) finalHealth = maxEnHealth;
-				}
-			}
-			else if(pcOrEn == 1)
-			{
-				if (enClass < 4)
-				{
-					finalHealth = healthChange - diceOut;
-					if (finalHealth < 0)
-					{
-						finalHealth = 0;
-					}
-				}
-				else if (enClass == 4)
-				{
-					finalHealth = healthChange + diceOut;
-					if (finalHealth > maxPcHealth) finalHealth = maxEnHealth;
-				}
-			}
-			
-			healthHolder = Convert.ToString(finalHealth);	
-		}
-		
-		void WinLoseCondition()
-		{
-			if (finalHealth == 0)
-			{
-				if (pcOrEn == 0) MessageBox.Show("Enemy has died. You win");
-				else if (pcOrEn == 1) MessageBox.Show("You have died. Fail");
-				enHealthLabel.Text = Convert.ToString(maxEnHealth);
-				pcHealthLabel.Text = Convert.ToString(maxPcHealth);
-			}
-		}
-		
-		void TurnSetAi(int aiHealthHolder, int aiManaHolder)
-		{
-			// AI todo
-			// Enemies can use magic and healing
-			// 
-			aiHealthHolder = Convert.ToInt32(enHealthLabel.Text);
-			aiManaHolder = Convert.ToInt32(enManaLabel.Text);
-			
-			if (turnCount == 1)
-			{
-				if(enClass == 4)
-				{
-					if(aiManaHolder >= 50)
-					{
-						if(aiHealthHolder <= 50)
-						{
-							EnHealing();
-						}
-						else if(aiHealthHolder >= 50)
-						{
-							EnFireball();
-						}
-					}
-					
-					else if(aiManaHolder <= 50)
-					{
-						EnMeleeAttack();
-					}
-				}
-				else if(enClass < 4)
-				{
-					EnMeleeAttack();
-				}
-			}
-			
-		}
-		
-		public void SetEnInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setClass)
-		{
-			this.enNameLabel.Text = setName;
-			maxEnHealth = Convert.ToInt32(setHealth);
-			this.enHealthLabel.Text = Convert.ToString(maxEnHealth);
-			maxEnMana = Convert.ToInt32(setMana);
-			this.enManaLabel.Text = Convert.ToString(maxEnMana);
-			this.enStLabel.Text = setSt;
-			this.enAgLabel.Text = setAg;
-			this.enIntLabel.Text = setInt;
-			enClass = setClass;
-		}
-		
-		public void SetPcInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setClass)
-		{
-			this.pcNameLabel.Text = setName;
-			maxPcHealth = Convert.ToInt32(setHealth);
-			this.pcHealthLabel.Text = Convert.ToString(maxPcHealth);
-			maxPcMana = Convert.ToInt32(setMana);
-			this.pcManaLabel.Text = Convert.ToString(maxPcMana);
-			this.pcStLabel.Text = setSt;
-			this.pcAgLabel.Text = setAg;
-			this.pcIntLabel.Text = setInt;
-			pcClass = setClass;
-		}
-		
-		void PcMeleeButtClick(object sender, EventArgs e)
-		{
-			EnMeleeAttack();
-			statHolder = Convert.ToInt32(pcStLabel.Text);
-			healthHolder = enHealthLabel.Text;
-			maxDice = 1;
-			diceType = 6;
-			pcOrEn = 0;
-			DiceLoop();
-			StatChanger();
-			enHealthLabel.Text = healthHolder;
-			WinLoseCondition();
-			turnCount = 1;
-		}
-		
-		void PcRangedButtClick(object sender, EventArgs e)
-		{
-			statHolder = Convert.ToInt32(pcAgLabel.Text);
-			healthHolder = enHealthLabel.Text;
-			maxDice = 1;
-			diceType = 6;
-			pcOrEn = 0;
-			DiceLoop();
-			StatChanger();
-			enHealthLabel.Text = healthHolder;
-			WinLoseCondition();
-			turnCount = 1;
-		}
-		
-		void PcFireballButtClick(object sender, EventArgs e)
-		{
-			statHolder = Convert.ToInt32(pcIntLabel.Text);
-			healthHolder = enHealthLabel.Text;
-			maxDice = 1;
-			diceType = 6;
-			pcOrEn = 0;
-			DiceLoop();
-			StatChanger();
-			enHealthLabel.Text = healthHolder;
-			WinLoseCondition();
-			turnCount = 1;
-		}
-		
-		void PcHealingButtClick(object sender, EventArgs e)
-		{
-			statHolder = Convert.ToInt32(pcIntLabel.Text);
-			healthHolder = pcHealthLabel.Text;
-			maxDice = 2;
-			diceType = 6;
-			DiceLoop();
-			StatChanger();
-			pcHealthLabel.Text = healthHolder;
-			turnCount = 1;
-		}
-		
-		void EnMeleeAttack()
-		{
-			statHolder = Convert.ToInt32(enStLabel.Text);
-			healthHolder = pcHealthLabel.Text;
-			maxDice = 1;
-			diceType = 6;
-			pcOrEn = 1;
-			DiceLoop();
-			StatChanger();
-			pcHealthLabel.Text = healthHolder;
-			WinLoseCondition();
-			turnCount = 0;
-		}
-		
-		void EnRangedAttack()
-		{
-			statHolder = Convert.ToInt32(enStLabel.Text);
-			healthHolder = pcHealthLabel.Text;
-			maxDice = 1;
-			diceType = 6;
-			pcOrEn = 1;
-			DiceLoop();
-			StatChanger();
-			pcHealthLabel.Text = healthHolder;
-			WinLoseCondition();
-			turnCount = 0;
+			/// <summary>
+			/// TODO
+			/// fix program to have classes to return variables more often
+			/// make attack buttons context sensitive for each class
+			/// add actions and items
+			/// may need to have pages pop up for skills and items respectively
+			/// set up an experience and levelling system with changable attributes
+			/// 
+			/// Errors
+			/// First round yields no results
+			/// 
+			/// </summary>
 		}
 				
-		void EnFireball()
+		public void SetInfo(string setName, string setHealth, string setMana, string setSt, string setAg, string setInt, int setClass)
 		{
-			pcOrEn = 1;
-			statHolder = Convert.ToInt32(enStLabel.Text);
-			healthHolder = pcHealthLabel.Text;
-			manaHolder = Convert.ToInt32(enManaLabel.Text);
-			manaHolder2 = manaHolder - 10;
-			enManaLabel.Text =  Convert.ToString(manaHolder2);
-			maxDice = 4;
-			diceType = 6;
-			DiceLoop();
-			StatChanger();
-			pcHealthLabel.Text = healthHolder;
-			WinLoseCondition();
-			turnCount = 0;
+			if(GlobalVariables.turnCount == 0)
+			{
+				this.pcNameLabel.Text = setName;
+				_pcStats.health = Convert.ToInt32(setHealth);
+				this.pcHealthLabel.Text = Convert.ToString(_pcStats.health);
+				_pcStats.curHealth = MainForm._pcStats.health;
+				_pcStats.mana = Convert.ToInt32(setMana);
+				_pcStats.curMana = Convert.ToInt32(setMana);
+				this.pcManaLabel.Text = Convert.ToString(_pcStats.mana);
+				this.pcStLabel.Text = setSt;
+				_pcStats.stren = Convert.ToInt32(setSt);
+				this.pcAgLabel.Text = setAg;
+				_pcStats.agili = Convert.ToInt32(setAg);
+				this.pcIntLabel.Text = setInt;
+				_pcStats.intel = Convert.ToInt32(setInt);
+				_pcStats.charClass = setClass;
+				Ai.TurnSet(1);
+			}
+			else if(GlobalVariables.turnCount == 1)
+			{
+				this.enNameLabel.Text = setName;
+				_npcStats.health = Convert.ToInt32(setHealth);
+				this.enHealthLabel.Text = Convert.ToString(_npcStats.health);
+				_npcStats.curHealth = MainForm._npcStats.health;
+				_npcStats.mana = Convert.ToInt32(setMana);
+				_npcStats.curMana = Convert.ToInt32(setMana);
+				this.enManaLabel.Text = Convert.ToString(_npcStats.mana);
+				this.enStLabel.Text = setSt;
+				_npcStats.stren = Convert.ToInt32(setSt);
+				this.enAgLabel.Text = setAg;
+				_npcStats.agili = Convert.ToInt32(setAg);
+				this.enIntLabel.Text = setInt;
+				_npcStats.intel = Convert.ToInt32(setInt);
+				_npcStats.charClass = setClass;
+				Ai.TurnSet(0);
+			}
 		}
-						
-		void EnHealing()
+
+		public void StatSet()
 		{
-			pcOrEn = 1;
-			statHolder = Convert.ToInt32(enIntLabel.Text);
-			healthHolder = enHealthLabel.Text;
-			manaHolder = Convert.ToInt32(enManaLabel.Text);
-			manaHolder2 = manaHolder - 15;
-			enManaLabel.Text =  Convert.ToString(manaHolder2);
-			maxDice = 5;
-			diceType = 10;
-			DiceLoop();
-			StatChanger();
-			pcHealthLabel.Text = healthHolder;
-			turnCount = 0;
+			enHealthLabel.Text = Convert.ToString(GlobalVariables.npcHealthPasser);
+			enManaLabel.Text = Convert.ToString(GlobalVariables.npcManaPasser);
+			if (GlobalVariables.npcHealthPasser == 0)MessageBox.Show("Enemy has died. You win");
+
+			pcHealthLabel.Text = Convert.ToString(GlobalVariables.pcHealthPasser);
+			pcManaLabel.Text = Convert.ToString(GlobalVariables.pcManaPasser);
+			if (GlobalVariables.pcHealthPasser == 0)MessageBox.Show("You have died. Fail");
+		}
+
+		void AiRoutine()//used to handle background ai functions
+		{
+			Ai.TurnSet(1);
+			Ai.NpcAi(MainForm._npcStats.curMana, MainForm._npcStats.mana, MainForm._npcStats.curHealth, MainForm._npcStats.health);
+			StatSet();
+			ActionVariables.healingOnOff = 0;
+			ActionVariables.potionOnOff = 0;
+		}
+
+		void PcMeleeButtClick(object sender, EventArgs e)
+		{ 
+			Ai.TurnSet(0);
+			Actions.Melee(_pcStats.stren);
+			AiRoutine();
+		}
+
+		void PcRangedButtClick(object sender, EventArgs e)
+		{
+			Ai.TurnSet(0);
+			Actions.Ranged(_pcStats.agili);
+			AiRoutine();
+		}
+
+		void PcFireballButtClick(object sender, EventArgs e)
+		{
+			Ai.TurnSet(0);
+			Actions.FireBall(_pcStats.intel);
+			AiRoutine();
+		}
+
+		void PcHealingButtClick(object sender, EventArgs e)
+		{
+			Ai.TurnSet(0);
+			Actions.Healing(_pcStats.intel);
+			ActionVariables.healingOnOff = 0;
+			AiRoutine();
 		}
 		
-		void ChClassButtClick(object sender, EventArgs e)
+		void HealthPotionButtonClick(object sender, EventArgs e)
 		{
-			CharStats form = new CharStats(this);
-     		form.Show();
+			Ai.TurnSet(0);
+			Actions.HealthPotion();
+			ActionVariables.potionOnOff = 0;
+			ActionVariables.healingOnOff = 0;
+			AiRoutine();
+		}
+		
+		void ManaPotionButtonClick(object sender, EventArgs e)
+		{
+			Ai.TurnSet(0);
+			Actions.ManaPotion();
+			ActionVariables.potionOnOff = 0;
+			ActionVariables.healingOnOff = 0;
+			AiRoutine();
 		}
 	}
 }
