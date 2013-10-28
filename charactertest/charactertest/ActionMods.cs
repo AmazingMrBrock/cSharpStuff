@@ -77,40 +77,42 @@ namespace charactertest
 					if (ActionVariables.npcFinalMana < 0) ActionVariables.npcFinalMana = 0;
 				}
 			}
-			ActionVariables.finalHealth = healthChange - ActionVariables.diceOut;
-			if (ActionVariables.finalHealth < 0) ActionVariables.finalHealth = 0;
-			ActionVariables.finalMana = manaChange - manaCost;
-			if (ActionVariables.finalMana < 0) ActionVariables.finalMana = 0;
-				
-			else if(ActionVariables.potionOnOff == 1)
-			{
-				if(ActionVariables.healthOrMana == 0)
-				{
-					if(GlobalVariables.turnCount == 0)
-					{
-						ActionVariables.finalHealth = healthChange + ActionVariables.potionHealth;
-						if (ActionVariables.finalHealth > MainForm._pcStats.health) ActionVariables.finalHealth = MainForm._pcStats.health;
-					}
-					if(GlobalVariables.turnCount == 1)
-					{
-						ActionVariables.finalHealth = healthChange + ActionVariables.potionHealth;
-						if (ActionVariables.finalHealth > MainForm._npcStats.health) ActionVariables.finalHealth = MainForm._npcStats.health;
-					}
-				}
-				else if(ActionVariables.healthOrMana == 1)
-				{
-					if(GlobalVariables.turnCount == 0)
-					{
-						ActionVariables.finalMana = manaChange + ActionVariables.potionMana;
-						if (ActionVariables.finalMana > MainForm._pcStats.mana) ActionVariables.finalMana = MainForm._pcStats.mana;
-					}
-					if(GlobalVariables.turnCount == 1)
-					{
-						ActionVariables.finalMana = manaChange + ActionVariables.potionMana;
-						if (ActionVariables.finalMana > MainForm._npcStats.mana) ActionVariables.finalMana = MainForm._npcStats.mana;
-					}
-				}
-			}
+			
+//			below is example material
+//			ActionVariables.finalHealth = healthChange - ActionVariables.diceOut;
+//			if (ActionVariables.finalHealth < 0) ActionVariables.finalHealth = 0;
+//			ActionVariables.finalMana = manaChange - manaCost;
+//			if (ActionVariables.finalMana < 0) ActionVariables.finalMana = 0;
+//				
+//			else if(ActionVariables.potionOnOff == 1)
+//			{
+//				if(ActionVariables.healthOrMana == 0)
+//				{
+//					if(GlobalVariables.turnCount == 0)
+//					{
+//						ActionVariables.finalHealth = healthChange + ActionVariables.potionHealth;
+//						if (ActionVariables.finalHealth > MainForm._pcStats.health) ActionVariables.finalHealth = MainForm._pcStats.health;
+//					}
+//					if(GlobalVariables.turnCount == 1)
+//					{
+//						ActionVariables.finalHealth = healthChange + ActionVariables.potionHealth;
+//						if (ActionVariables.finalHealth > MainForm._npcStats.health) ActionVariables.finalHealth = MainForm._npcStats.health;
+//					}
+//				}
+//				else if(ActionVariables.healthOrMana == 1)
+//				{
+//					if(GlobalVariables.turnCount == 0)
+//					{
+//						ActionVariables.finalMana = manaChange + ActionVariables.potionMana;
+//						if (ActionVariables.finalMana > MainForm._pcStats.mana) ActionVariables.finalMana = MainForm._pcStats.mana;
+//					}
+//					if(GlobalVariables.turnCount == 1)
+//					{
+//						ActionVariables.finalMana = manaChange + ActionVariables.potionMana;
+//						if (ActionVariables.finalMana > MainForm._npcStats.mana) ActionVariables.finalMana = MainForm._npcStats.mana;
+//					}
+//				}
+//			}
 		}
 		
 		public static double GetPercent(double ratio) // call and give numbers like so GetPercent((double)92 / 255);
